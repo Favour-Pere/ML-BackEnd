@@ -7,6 +7,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(script_dir, 'heart_model.pkl')
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return "Heart Prediction API is running"
+
 model = joblib.load(file_path)
 
 expected_features = ['Age', 'Sex', 'ChestPainType', 'RestingBP', 'Cholesterol', 'FastingBS', 'RestingECG', 'MaxHR', 'ExerciseAngina', 'Oldpeak', 'ST_Slope']
@@ -27,4 +31,5 @@ def predict():
     return jsonify({"prediction": int(prediction), 'result' : result})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
